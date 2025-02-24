@@ -2,9 +2,13 @@
 
 const comp_pruebajeisons = () => {
     return (
-        <div>
-            <h1>Hello, World!</h1>
-            <p>This is a sample component.</p>
+        <div className='container'>
+            <div className='row'>
+                <div className='col'>
+                    <h1 className='d-flex justify-content-center py-3'>Practica07B con React</h1>
+                    <a className='text-primary' href="http://www.google.es">GOOGLE</a>
+                </div>
+            </div>
         </div>
     );
 };
