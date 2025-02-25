@@ -1,0 +1,47 @@
+[
+    {
+        "titulo": "Cuestionario de Evaluación Académica",
+        "preguntas": [
+            {
+                "id": "comentarios",
+                "tipo": "textarea",
+                "pregunta": "¿Qué mejorarías en el curso?",
+                "respuesta": "El contenido del curso está bien, pero sería útil más ejemplos prácticos.",
+                "restricciones": {
+                    "min": 15,
+                    "max": 250
+                }
+            },
+            {
+                "id": "satisfaccion",
+                "tipo": "select",
+                "pregunta": "¿Qué tan satisfecho estás con el contenido del curso?",
+                "respuesta": "4",
+                "opciones": ["1", "2", "3", "4", "5"]
+            },
+            {
+                "id": "asistencia",
+                "tipo": "check",
+                "pregunta": "¿Asististe a todas las clases?",
+                "respuesta": "no",
+                "opciones": ["sí", "no"]
+            },
+            {
+                "id": "horarios",
+                "tipo": "check",
+                "pregunta": "¿Cuáles horarios prefieres para las clases? (Selecciona hasta 2 opciones)",
+                "respuesta": [],
+                "opciones": [
+                    "Lunes 9:00 AM - 11:00 AM",
+                    "Martes 3:00 PM - 5:00 PM",
+                    "Miércoles 10:00 AM - 12:00 PM",
+                    "Jueves 1:00 PM - 3:00 PM",
+                    "Viernes 4:00 PM - 6:00 PM"
+                ],
+                "validacion": {
+                    "max_seleccionados": 2
+                }
+            }
+        ]
+    }
+]

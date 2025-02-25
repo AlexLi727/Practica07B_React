@@ -1,0 +1,41 @@
+[
+    {
+        "titulo": "Encuesta de Preferencias en Tecnología",
+        "preguntas": [
+            {
+                "id": "comentarios",
+                "tipo": "textarea",
+                "pregunta": "¿Qué tecnología te gustaría aprender en el futuro?",
+                "respuesta": "Me gustaría aprender sobre inteligencia artificial y machine learning.",
+                "restricciones": {
+                    "min": 20,
+                    "max": 200
+                }
+            },
+            {
+                "id": "sistema_operativo",
+                "tipo": "select",
+                "pregunta": "¿Qué sistema operativo prefieres usar?",
+                "respuesta": "Linux",
+                "opciones": ["Windows", "Linux", "MacOS"]
+            },
+            {
+                "id": "productos",
+                "tipo": "check",
+                "pregunta": "¿Qué dispositivos usas regularmente? (Selecciona hasta 2 opciones)",
+                "respuesta": ["smartphone"],
+                "opciones": ["smartphone", "laptop", "tablet", "smartwatch"],
+                "validacion": {
+                    "max_seleccionados": 2
+                }
+            },
+            {
+                "id": "tiempo",
+                "tipo": "select",
+                "pregunta": "¿Cuántas horas a la semana dedicas a aprender sobre tecnología?",
+                "respuesta": "5",
+                "opciones": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+            }
+        ]
+    }
+]
