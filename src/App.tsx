@@ -7,7 +7,7 @@ import userData from '../src/assets/Json_data/userData.json'; // Importa el JSON
 
 const App: React.FC = () => {
     return (
-        <div>
+        <div className="container">
             {/* Renderiza el formulario de evaluación académica */}
             <DynamicForm data={academicEvaluation[0]} />
             {/* Renderiza el formulario de encuesta de cine */}
