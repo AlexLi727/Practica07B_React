@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import DynamicForm from '../src/components/comp_formularios/dynamicForm'; // Asegúrate de que la ruta sea correcta
 import academicEvaluation from '../src/assets/Json_data/academicEvaluation.json'; // Importa el JSON de evaluación académica
 import filmSurvey from '../src/assets/Json_data/filmSurvey.json'; // Importa el JSON de encuesta de cine
@@ -6,6 +6,20 @@ import technologySurvey from '../src/assets/Json_data/technologySurvey.json'; //
 import userData from '../src/assets/Json_data/userData.json'; // Importa el JSON de datos del usuario
 
 const App: React.FC = () => {
+  const [form, setForm] = useState(0);
+  
+    switch(form){
+      case 0:
+        return <DynamicForm data={academicEvaluation[0]} />
+      case 1:
+        return <DynamicForm data={filmSurvey[0]} />
+      case 2:
+        return <DynamicForm data={technologySurvey[0]} />
+      case 3:
+        return <DynamicForm data={userData[0]} />
+    };
+ 
+
     return (
         <div>
             {/* Renderiza el formulario de evaluación académica */}
