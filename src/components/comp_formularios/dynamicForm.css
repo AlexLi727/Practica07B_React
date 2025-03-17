@@ -1,0 +1,61 @@
+body {
+  background-color: #007bff !important; /* Color de fondo azul */
+  font-family: "Arial, sans-serif"; /* Fuente del texto */
+  color: white !important; /* Color del texto */
+}
+
+h2 {
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  text-align: center; /* Centrar el título */
+  font-size: 2rem; /* Tamaño del título */
+  margin-bottom: 20px; /* Espacio por debajo del título */
+}
+
+.mb-3 {
+  margin-bottom: 15px; /* Espaciado entre preguntas */
+}
+
+label {
+  font-weight: bold; /* Negrita para las etiquetas */
+}
+
+button {
+  display: block; /* Centrar botón */
+  width: 100%; /* Botón ocupa todo el ancho */
+  padding: 10px; /* Espaciado interior del botón */
+  background-color: #ffc107; /* Color del botón */
+  border: none; /* Sin borde */
+  color: #000; /* Color del texto en el botón */
+  font-weight: bold; /* Negrita para el texto del botón */
+  cursor: pointer; /* Cambio del cursor al pasar sobre el botón */
+  transition: background-color 0.3s; /* Efecto de transición en el color de fondo */
+}
+
+button:hover {
+  background-color: #ffd600 !important; /* Color al pasar el ratón */
+  color: green !important; /* Color del texto al pasar el ratón */
+}
+
+textarea,
+select {
+  border-radius: 5px; /* Bordes redondeados */
+  border: none; /* Sin borde */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15) !important; /* Sombra */
+}
+
+textarea {
+  width: 100%; /* Ocupar todo el ancho */
+  padding: 10px; /* Espaciado interior */
+}
+
+select {
+  width: 25%; /* Ocupar todo el ancho */
+  padding: 10px; /* Espaciado interior */
+}
+
+form {
+  background-color: #459fff; /* Color de fondo del formulario */
+  padding: 20px; /* Espaciado interior */
+  border-radius: 5px; /* Bordes redondeados */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15) !important; /* Sombra */
+}
