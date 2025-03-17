@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import academicEvaluation from "../../assets/Json_data/academicEvaluation.json"; // Importa el JSON de evaluación académica
-import filmSurvey from "../../assets/Json_data/filmSurvey.json"
+import filmSurvey from "../../assets/Json_data/filmSurvey.json";
+import technologySurvey from "../../assets/Json_data/technologySurvey.json";
+import userData from "../../assets/Json_data/userData.json";
 
 interface Pregunta {
     id: string;
@@ -35,17 +37,16 @@ const DynamicForm: React.FC = () => {
     const changeForm = () => {
         switch(form){
             case 0:
-                console.log("0");
                 return academicEvaluation[0];
             case 1:
                 console.log("1");
-                return academicEvaluation[0];
+                return filmSurvey[0];
             case 2:
                 console.log("2");
-                return academicEvaluation[0];
+                return technologySurvey[0];
             case 3:
                 console.log("3");
-                return academicEvaluation[0];
+                return userData[0];
             default:
                 return academicEvaluation[0];
         }
@@ -53,7 +54,7 @@ const DynamicForm: React.FC = () => {
 
     const [formData, setFormData] = useState(() => { 
         const initialData: Record<string, string | string[]> = {};
-        academicEvaluation[0].preguntas.forEach(pregunta => {
+        changeForm().preguntas.forEach(pregunta => {
             initialData[pregunta.id] = pregunta.respuesta || (pregunta.tipo === 'check' ? [] : '');
         });
         return initialData;
@@ -90,13 +91,16 @@ const DynamicForm: React.FC = () => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log('Form Data:', formData);
+
+        console.log(form);
+        setForm(form+1);
         // Aquí puedes manejar el envío de datos
     };
 
     return (
         <form onSubmit={handleSubmit}>
-            <h2>{filmSurvey[0].titulo}</h2>
-            {filmSurvey[0].preguntas.map(pregunta => {
+            <h2>{changeForm().titulo}</h2>
+            {changeForm().preguntas.map(pregunta => {
                 switch (pregunta.tipo) {
                     case 'textarea':
                         return (
@@ -124,33 +128,39 @@ const DynamicForm: React.FC = () => {
                                 </select>
                             </div>
                         );
-                    // case 'check':
-                    //     return (
-                    //         <div key={pregunta.id}>
-                    //             <label>{pregunta.pregunta}</label>
-                    //             {pregunta.opciones?.map(opcion => (
-                    //                 <div key={opcion}>
-                    //                     <input
-                    //                         type="checkbox"
-                    //                         checked={(formData[pregunta.id] as string[]).includes(opcion)}
-                    //                         onChange={(e) => {
-                    //                             const newValue = e.target.checked
-                    //                                 ? [...(formData[pregunta.id] as string[]), opcion]
-                    //                                 : (formData[pregunta.id] as string[]).filter(o => o !== opcion);
-                    //                             if (pregunta.validacion?.max_seleccionados) {
-                    //                                 if (newValue.length <= pregunta.validacion.max_seleccionados) {
-                    //                                     handleChange(pregunta.id, newValue);
-                    //                                 }
-                    //                             } else {
-                    //                                 handleChange(pregunta.id, newValue);
-                    //                             }
-                    //                         }}
-                    //                     />
-                    //                     {opcion}
-                    //                 </div>
-                    //             ))}
-                    //         </div>
-                    //     );
+                    case 'check':
+                        return (
+                            <div key={pregunta.id}>
+                                <label>{pregunta.pregunta}</label>
+                                {pregunta.opciones?.map(opcion => (
+                                    <div key={opcion}>
+                                        <input
+                                            type="checkbox"
+                                            
+                                            //checked={(formData[pregunta.id] as string[]).includes(opcion)}
+                                            onChange={(e) => {
+                                                const newValue = e.target.checked
+                                                    ? [...(formData[pregunta.id] as string[]), opcion]
+                                                    : (formData[pregunta.id] as string[]).filter(o => o !== opcion);
+                                                if (pregunta.validacion?.max_seleccionados) {
+                                                    console.log(pregunta.validacion.max_seleccionados);
+                                                    if (newValue.length <= pregunta.validacion.max_seleccionados) {
+                                                        handleChange(pregunta.id, newValue);
+                                                    }
+                                                    if (newValue.length == pregunta.validacion.max_seleccionados){
+                                                        this.disabled="true"
+                                                    }
+                                                } else {
+                                                    handleChange(pregunta.id, newValue);
+                                                }
+                                            }}
+                                            
+                                        />
+                                        {opcion}
+                                    </div>
+                                ))}
+                            </div>
+                        );
                     default:
                         return null;
                 }
