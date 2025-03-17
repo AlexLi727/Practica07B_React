@@ -61,25 +61,6 @@ const DynamicForm: React.FC = () => {
     }
     );
 
-    // const [form, setForm] = useState(0);
-
-    // const changeForm = (form:number) => {
-    //     switch(form){
-    //         case 0:
-    //             console.log("0");
-    //             return "dsafdfs";
-    //         case 1:
-    //             console.log("1");
-    //             return "dswfs";
-    //         case 2:
-    //             console.log("2");
-    //             return "sdfasdf";
-    //         case 3:
-    //             console.log("3");
-    //             return "sdfdsf"
-    //     }
-    // };
-
 
     const handleChange = (id: string, value: string | string[]) => {
         setFormData(prev => ({
