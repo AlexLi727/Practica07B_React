@@ -71,15 +71,15 @@ const DynamicForm: React.FC = () => {
     const changeForm = () => {
         switch(form){
             case 0:
-                return academicEvaluation[0];
+                return userData[0];
             case 1:
-                console.log("1");
-                return filmSurvey[0];
+                console.log("form 1");
+                return userData[0];
             case 2:
-                console.log("2");
+                console.log("form 2");
                 return technologySurvey[0];
             case 3:
-                console.log("3");
+                console.log("form 3");
                 return userData[0];
             default:
                 return academicEvaluation[0];
@@ -94,6 +94,14 @@ const DynamicForm: React.FC = () => {
         return initialData;
     }
     );
+    
+    const changeData = () => {
+        const initialData: Record<string, string | string[]> = {};
+        changeForm().preguntas.forEach(pregunta => {
+            initialData[pregunta.id] = pregunta.respuesta || (pregunta.tipo === 'check' ? [] : '');
+        });
+        return initialData;
+    }
 
     const handleChange = (id: string, value: string | string[]) => {
         setFormData(prev => ({
@@ -105,9 +113,11 @@ const DynamicForm: React.FC = () => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log('Form Data:', formData);
-
+        
+        console.log(formData);
         console.log(form);
         setForm(form+1);
+        setFormData(changeData);
         // Aquí puedes manejar el envío de datos
     };
     /*
@@ -122,9 +132,9 @@ const DynamicForm: React.FC = () => {
     return (
         <div className="container d-flex justify-content-center">
             <form onSubmit={handleSubmit}>
-                <h2>{data.titulo}</h2>
+                <h2>{changeForm().titulo}</h2>
                 <hr />
-                {data.preguntas.map(pregunta => {
+                {changeForm().preguntas.map(pregunta => {
                     switch (pregunta.tipo) {
                         case 'textarea':
                             return (
