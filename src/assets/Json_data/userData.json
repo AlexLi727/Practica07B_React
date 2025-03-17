@@ -44,14 +44,24 @@
                 "tipo": "select",
                 "pregunta": "¿Cuál es tu sexo?",
                 "respuesta": "",
-                "opciones": ["Masculino", "Femenino", "Otro"]
+                "opciones": [
+                    "Masculino",
+                    "Femenino",
+                    "Otro"
+                ]
             },
             {
                 "id": "preferencias",
                 "tipo": "check",
                 "pregunta": "¿Qué prefieres hacer en tu tiempo libre?",
                 "respuesta": "",
-                "opciones": ["Leer", "Deportes", "Viajar", "Cine"]
+                "opciones": [
+                    "Leer",
+                    "Deportes",
+                    "Viajar",
+                    "Cine"
+                ],
+                "requerido": true
             }
         ]
     }

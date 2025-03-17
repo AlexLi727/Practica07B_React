@@ -38,6 +38,8 @@ interface Pregunta {
         formato?: string;
         dominio?: string;
     };
+    //propiedad para validar los checkbox
+    requerido?: boolean;
 }
 
 /*
@@ -73,17 +75,55 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ data }) => {
         });
         return initialData;
     });
+    //Estado para manejar errores
+    const [errores, setErrores] = useState<Record<string, string>>({});
+
     //handleChange: función para manejar los cambios en las respuestas
     const handleChange = (id: string, value: string | string[]) => {
         setFormData(prev => ({
             ...prev,
             [id]: value
         }));
+        //validar al cambiar
+        const pregunta = data.preguntas.find(p => p.id === 'id');
+        if (pregunta?.tipo === 'check' && pregunta?.requerido) {
+            if (Array.isArray(value) && value.length === 0) {
+                setErrores(prev => ({
+                    ...prev,
+                    [id]: 'Una selección obligatoria'
+                }));
+            } else {
+                setErrores(prev => ({
+                    ...prev,
+                    [id]: ''
+                }));
+            }
+        }
     };
+
+
+
     //handleSubmit: función para manejar el envío de datos
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('Form Data:', formData);
+        //validar todos los campos check requeridos
+        const newErrors: Record<string, string> = {};
+        let isValid = true;
+        data.preguntas.forEach(pregunta => {
+            if (pregunta.tipo === 'check' && pregunta.requerido) {
+                const value = formData[pregunta.id] as string[];
+                if (value.length === 0) {
+                    newErrors[pregunta.id] = 'Una selección obligatoria';
+                    isValid = false;
+                }
+            }
+        });
+        setErrores(newErrors);
+        if (isValid) {
+            console.log('Form Data:', formData);
+        } else {
+            alert('Debes seleccionar un checkbox');
+        }
         // Aquí puedes manejar el envío de datos
     };
     /*
@@ -111,7 +151,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ data }) => {
                                         onChange={(e) => handleChange(pregunta.id, e.target.value)}
                                         minLength={pregunta.restricciones?.min}
                                         maxLength={pregunta.restricciones?.max}
-                                    />
+                                        required />
                                 </div>
                             );
                         case 'select':
@@ -153,6 +193,24 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ data }) => {
                                             {opcion}
                                         </div>
                                     ))}
+                                </div>
+                            );
+                        case 'text':
+                            return (
+                                <div className="mb-3" key={pregunta.id}>
+                                    <label>{pregunta.pregunta}</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        value={formData[pregunta.id] as string}
+                                        onChange={(e) => handleChange(pregunta.id, e.target.value)}
+                                        minLength={pregunta.restricciones?.min}
+                                        maxLength={pregunta.restricciones?.max}
+                                        required
+                                    />
+                                    {errores[pregunta.id] && (
+                                        <span className="text-danger">{errores[pregunta.id]}</span>
+                                    )}
                                 </div>
                             );
                         default:

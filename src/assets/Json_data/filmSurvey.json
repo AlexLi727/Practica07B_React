@@ -28,13 +28,14 @@
                 "id": "vista",
                 "tipo": "check",
                 "pregunta": "¿Has visto alguna de las siguientes películas?",
-                "respuesta": "sí",
+                "respuesta": [],
                 "opciones": [
                     "Inception",
                     "The Matrix",
                     "Avengers",
                     "Titanic"
-                ]
+                ],
+                "requerido": true
             },
             {
                 "id": "frecuencia",
