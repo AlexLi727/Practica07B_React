@@ -8,8 +8,6 @@ interface BannerProps {
   title: string;
 }
 
-
-
 const Banner: React.FC<BannerProps> = ({ title }) => {
   return (
     <header className="banner">
