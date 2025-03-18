@@ -1,0 +1,17 @@
+.footer {
+    width: 100%;
+    background-color: #4a4e91; /* Mismo color que el banner */
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 40px; /* Espacio entre el contenido y el footer */
+  }
+  
+  .footer span {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  }
+  
