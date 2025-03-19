@@ -78,19 +78,53 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ data }) => {
     //Estado para manejar errores
     const [errores, setErrores] = useState<Record<string, string>>({});
 
-    //handleChange: función para manejar los cambios en las respuestas
+    /**
+     * 
+     * @param id 
+     * @param value 
+     */
     const handleChange = (id: string, value: string | string[]) => {
+        //Actualiza el estado de formData con la nueva respuesta
         setFormData(prev => ({
             ...prev,
             [id]: value
         }));
-        //validar al cambiar
-        const pregunta = data.preguntas.find(p => p.id === 'id');
-        if (pregunta?.tipo === 'check' && pregunta?.requerido) {
-            if (Array.isArray(value) && value.length === 0) {
+        //En funcion de la ID de la pregunta, se aplican las validaciones correspondientes
+        //En este caso, se valida que el campo nombre solo contenga letras y espacios
+        if (id == 'nombre') {
+            const regex = /^[a-zA-Z\s]*$/;
+            if (!regex.test(value as string)) {
                 setErrores(prev => ({
                     ...prev,
-                    [id]: 'Una selección obligatoria'
+                    [id]: 'Solo se permiten letras y espacios'
+                }));
+            } else {
+                setErrores(prev => ({
+                    ...prev,
+                    [id]: ''
+                }));
+            }
+            //En este caso, se valida que el campo contenga una fecha válida
+        }else if (id === 'fecha_nacimiento') {
+            const regex = /^\d{2}\/\d{2}\/\d{4}$/;
+            if (!regex.test(value as string)) {
+                setErrores(prev => ({
+                    ...prev,
+                    [id]: 'Formato de fecha incorrecto. Debe ser dd/mm/yyyy'
+                }));
+            } else {
+                setErrores(prev => ({
+                    ...prev,
+                    [id]: ''
+                }));
+            }
+            //En este caso, se valida que el campo contenga un email válido acabado en @stucom.com
+        } else if (id === 'email'){
+            const regex = /^[a-zA-Z0-9._%+-]+@stucom\.com$/;
+            if (!regex.test(value as string)) {
+                setErrores(prev => ({
+                    ...prev,
+                    [id]: 'Formato de email incorrecto'
                 }));
             } else {
                 setErrores(prev => ({
@@ -100,15 +134,14 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ data }) => {
             }
         }
     };
-
-
-
-    //handleSubmit: función para manejar el envío de datos
+    
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        //validar todos los campos check requeridos
+    
         const newErrors: Record<string, string> = {};
         let isValid = true;
+    
+        // Validar todos los campos check requeridos
         data.preguntas.forEach(pregunta => {
             if (pregunta.tipo === 'check' && pregunta.requerido) {
                 const value = formData[pregunta.id] as string[];
@@ -118,13 +151,14 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ data }) => {
                 }
             }
         });
+    
         setErrores(newErrors);
+    
         if (isValid) {
             console.log('Form Data:', formData);
         } else {
-            alert('Debes seleccionar un checkbox');
+            alert('Por favor, completa todos los campos obligatorios');
         }
-        // Aquí puedes manejar el envío de datos
     };
     /*
     * Genera el formulario dinámico
