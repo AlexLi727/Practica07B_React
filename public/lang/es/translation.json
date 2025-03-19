@@ -1,0 +1,29 @@
+{
+    "card": {
+        "title": "¡Bienvenid@ a Quizly! 🎉",
+        "content": "Gracias por participar en esta experiencia. A continuación, te guiaremos a través de una serie de formularios diseñados para conocerte mejor. El proceso es sencillo y se divide en varias secciones que deberás completar en orden.",
+        "how_it_works": "¿Cómo funciona?",
+        "steps": {
+            "step1": "📌 Paso 1: Completarás distintos formularios uno tras otro, cada uno con preguntas específicas sobre diferentes áreas.",
+            "step2": "📌 Paso 2: Al finalizar, recibirás un resumen con todas tus respuestas."
+        },
+        "sections": "Secciones del formulario",
+        "categories": {
+            "personal_info": "📝 Información personal: Queremos conocerte mejor, por lo que te pediremos algunos datos generales.",
+            "academic_evaluation": "📚 Evaluación académica: Cuéntanos sobre tu formación y experiencia educativa.",
+            "technology": "💻 Tecnología: Descubramos juntos tu nivel de afinidad con herramientas digitales y tecnología en general.",
+            "movies": "🎬 Cine: ¿Qué tipo de películas disfrutas? Queremos conocer tus gustos cinematográficos."
+        },
+        "requirements": "Requisitos para completar los formularios",
+        "rules": {
+            "rule1": "✅ Completa todos los campos requeridos en cada formulario antes de avanzar al siguiente.",
+            "rule2": "✅ Si un campo no es válido o está incompleto, recibirás un mensaje de error para corregirlo antes de continuar.",
+            "rule3": "✅ Una vez que completes todas las secciones, verás un resumen final con tus respuestas."
+        },
+        "advice": "💡 Consejo: Tómate tu tiempo para responder con sinceridad. No hay respuestas correctas o incorrectas, ¡solo queremos conocerte mejor!",
+        "start_button": "¡Comenzar!"
+    },
+        "banner": {
+            "home": "Inicio"
+        }
+}
