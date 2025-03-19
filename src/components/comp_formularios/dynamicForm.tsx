@@ -67,7 +67,7 @@ interface DynamicFormProps {
     data: Formulario;
 }
 
-const DynamicForm: React.FC = () => {
+const DynamicForm: React.FC<DynamicFormProps> = ({data}) => {
     const [form, setForm] = useState(0);
 
     const changeForm = () => {
@@ -107,7 +107,7 @@ const DynamicForm: React.FC = () => {
     }
 
 
-    });
+    
     //Estado para manejar errores
     const [errores, setErrores] = useState<Record<string, string>>({});
 
