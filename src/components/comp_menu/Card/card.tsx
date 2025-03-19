@@ -21,6 +21,7 @@ const Card: React.FC = () => {
       <h3 className="title">{t("card.title")}</h3>
       <p className="content">{t("card.content")}</p>
 
+
       {/* Sección que explica cómo funciona el cuestionario */}
       <h4>{t("card.how_it_works")}</h4>
       <ul>
@@ -45,12 +46,14 @@ const Card: React.FC = () => {
         <li>{t("card.rules.rule3")}</li>
       </ul>
 
+
       {/* Mensaje final con un consejo */}
       <p>{t("card.advice")}</p>
 
       {/* Botón para comenzar el cuestionario */}
       <Button action={t("card.start_button")} />
     </section>
+
   );
 };
 

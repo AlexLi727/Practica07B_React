@@ -1,16 +1,18 @@
 import React from "react";
 import "./Button.css";
+import App from "../../../App";
 
 interface ButtonProps {
-
-    action: string;
+    // action: string;
+    onClick: () => void 
 }
 
 
 
-const Button: React.FC<ButtonProps> = ({ action }) => {
+
+const Button: React.FC<ButtonProps> = ({ onClick } ) => {
     return (
-        <button>{action}</button>
+        <button onClick={onClick}>Prueba</button>
     );
 };
 
