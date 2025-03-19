@@ -44,6 +44,8 @@ interface Pregunta {
         formato?: string;
         dominio?: string;
     };
+    //propiedad para validar los checkbox
+    requerido?: boolean;
 }
 
 /*
@@ -92,6 +94,7 @@ const DynamicForm: React.FC = () => {
             initialData[pregunta.id] = pregunta.respuesta || (pregunta.tipo === 'check' ? [] : '');
         });
         return initialData;
+
     }
     );
     
@@ -103,13 +106,71 @@ const DynamicForm: React.FC = () => {
         return initialData;
     }
 
+
+    });
+    //Estado para manejar errores
+    const [errores, setErrores] = useState<Record<string, string>>({});
+
+    /**
+     * Funcion handleChange que se ejecutara a medida que el usuario vaya rellenando el formulario 
+     * @param id 
+     * @param value 
+     */
     const handleChange = (id: string, value: string | string[]) => {
+        //Actualiza el estado de formData con la nueva respuesta
         setFormData(prev => ({
             ...prev,
             [id]: value
         }));
+        //En funcion de la ID de la pregunta, se aplican las validaciones correspondientes
+        //En este caso, se valida que el campo nombre solo contenga letras y espacios
+        if (id == 'nombre') {
+            const regex = /^[a-zA-Z\s]*$/;
+            if (!regex.test(value as string)) {
+                setErrores(prev => ({
+                    ...prev,
+                    [id]: 'Solo se permiten letras y espacios'
+                }));
+            } else {
+                setErrores(prev => ({
+                    ...prev,
+                    [id]: ''
+                }));
+            }
+            //En este caso, se valida que el campo contenga una fecha válida
+        }else if (id === 'fecha_nacimiento') {
+            const regex = /^\d{2}\/\d{2}\/\d{4}$/;
+            if (!regex.test(value as string)) {
+                setErrores(prev => ({
+                    ...prev,
+                    [id]: 'Formato de fecha incorrecto. Debe ser dd/mm/yyyy'
+                }));
+            } else {
+                setErrores(prev => ({
+                    ...prev,
+                    [id]: ''
+                }));
+            }
+            //En este caso, se valida que el campo contenga un email válido acabado en @stucom.com
+        } else if (id === 'email'){
+            const regex = /^[a-zA-Z0-9._%+-]+@stucom\.com$/;
+            if (!regex.test(value as string)) {
+                setErrores(prev => ({
+                    ...prev,
+                    [id]: 'Formato de email incorrecto'
+                }));
+            } else {
+                setErrores(prev => ({
+                    ...prev,
+                    [id]: ''
+                }));
+            }
+        }
     };
-    //handleSubmit: función para manejar el envío de datos
+    /**
+     * Funcion handleSubmit que ejecutara las validaciones unicamente al enviar el formulario
+     * @param e 
+     */
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log('Form Data:', formData);
@@ -119,6 +180,29 @@ const DynamicForm: React.FC = () => {
         setForm(form+1);
         setFormData(changeData);
         // Aquí puedes manejar el envío de datos
+
+        const newErrors: Record<string, string> = {};
+        let isValid = true;
+    
+        // Validar todos los campos check requeridos
+        data.preguntas.forEach(pregunta => {
+            if (pregunta.tipo === 'check' && pregunta.requerido) {
+                const value = formData[pregunta.id] as string[];
+                if (value.length === 0) {
+                    newErrors[pregunta.id] = 'Una selección obligatoria';
+                    isValid = false;
+                }
+            }
+        });
+    
+        setErrores(newErrors);
+    
+        if (isValid) {
+            console.log('Form Data:', formData);
+        } else {
+            alert('Por favor, completa todos los campos obligatorios');
+        }
+
     };
     /*
     * Genera el formulario dinámico
@@ -145,7 +229,7 @@ const DynamicForm: React.FC = () => {
                                         onChange={(e) => handleChange(pregunta.id, e.target.value)}
                                         minLength={pregunta.restricciones?.min}
                                         maxLength={pregunta.restricciones?.max}
-                                    />
+                                        required />
                                 </div>
                             );
                         case 'select':
@@ -187,6 +271,24 @@ const DynamicForm: React.FC = () => {
                                             {opcion}
                                         </div>
                                     ))}
+                                </div>
+                            );
+                        case 'text':
+                            return (
+                                <div className="mb-3" key={pregunta.id}>
+                                    <label>{pregunta.pregunta}</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        value={formData[pregunta.id] as string}
+                                        onChange={(e) => handleChange(pregunta.id, e.target.value)}
+                                        minLength={pregunta.restricciones?.min}
+                                        maxLength={pregunta.restricciones?.max}
+                                        required
+                                    />
+                                    {errores[pregunta.id] && (
+                                        <span className="text-danger">{errores[pregunta.id]}</span>
+                                    )}
                                 </div>
                             );
                         default:
