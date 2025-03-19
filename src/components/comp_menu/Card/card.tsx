@@ -4,7 +4,8 @@ import Button from "../Button/button";
 
 const Card: React.FC = () => {
   return (
-    <section className="card">
+    <>
+    {/* <section className="card"> */}
       <h3 className="title">¡Bienvenid@ a Quizly! 🎉</h3>
       <p className="content">
         Gracias por participar en esta experiencia. A continuación, te guiaremos a través de una serie de formularios diseñados para conocerte mejor. 
@@ -34,9 +35,10 @@ const Card: React.FC = () => {
       </ul>
 
       <p>💡 Consejo: Tómate tu tiempo para responder con sinceridad. No hay respuestas correctas o incorrectas, ¡solo queremos conocerte mejor!</p>
-    <Button action="¡Comenzar!"/>
+      {/* <Button action="¡Comenzar!" /> */}
       
-    </section>
+    {/* </section> */}
+    </>
   );
 };
 
