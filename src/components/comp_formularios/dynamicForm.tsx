@@ -100,11 +100,10 @@ const DynamicForm: React.FC = () => {
     const [errores, setErrores] = useState<Record<string, string>>({});
 
     /**
-     * 
+     * Funcion handleChange que se ejecutara a medida que el usuario vaya rellenando el formulario 
      * @param id 
      * @param value 
      */
-
     const handleChange = (id: string, value: string | string[]) => {
         //Actualiza el estado de formData con la nueva respuesta
         setFormData(prev => ({
@@ -156,11 +155,12 @@ const DynamicForm: React.FC = () => {
             }
         }
     };
-    
+    /**
+     * Funcion handleSubmit que ejecutara las validaciones unicamente al enviar el formulario
+     * @param e 
+     */
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-    
         const newErrors: Record<string, string> = {};
         let isValid = true;
     
