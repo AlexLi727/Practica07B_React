@@ -1,0 +1,29 @@
+{
+    "card": {
+        "title": "Welcome to Quizly! 🎉",
+        "content": "Thank you for participating in this experience. We will guide you through a series of forms designed to get to know you better. The process is simple and divided into several sections that you must complete in order.",
+        "how_it_works": "How does it work?",
+        "steps": {
+            "step1": "📌 Step 1: You will complete different forms one after another, each with specific questions about different areas.",
+            "step2": "📌 Step 2: At the end, you will receive a summary with all your answers."
+        },
+        "sections": "Form sections",
+        "categories": {
+            "personal_info": "📝 Personal information: We want to get to know you better, so we will ask for some general data.",
+            "academic_evaluation": "📚 Academic evaluation: Tell us about your education and academic experience.",
+            "technology": "💻 Technology: Let's discover your affinity with digital tools and technology.",
+            "movies": "🎬 Movies: What type of movies do you enjoy? We want to know your film preferences."
+        },
+        "requirements": "Requirements to complete the forms",
+        "rules": {
+            "rule1": "✅ Complete all required fields in each form before moving to the next one.",
+            "rule2": "✅ If a field is invalid or incomplete, you will receive an error message to correct it before continuing.",
+            "rule3": "✅ Once you complete all sections, you will see a final summary with your answers."
+        },
+        "advice": "💡 Tip: Take your time to answer honestly. There are no right or wrong answers, we just want to get to know you better!",
+        "start_button": "Start!"
+    },
+    "banner": {
+        "home": "Home"
+    }
+}

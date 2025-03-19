@@ -1,0 +1,72 @@
+.banner {
+  width: 100%;
+  background:#4a4e91;
+  color: white;
+  padding: 15px 30px;
+  display: flex;
+  align-items: center; /* 🔹 Alinea los elementos */
+  justify-content: space-between; /* 🔹 Distribuye los elementos */
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+/* 🔹 Estilo del enlace "Inicio" */
+.banner a {
+  text-decoration: none;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  margin-right: 20px; /* 🔹 Aumenta la separación con el selector */
+}
+
+.banner a:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* 🔹 Contenedor del selector de idioma */
+.banner-lang {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* 🔹 Espacio entre el icono y el select */
+}
+
+/* 🔹 Estilo del icono */
+.banner-lang i {
+  font-size: 20px;
+  color: white;
+}
+
+/* 🔹 Estilos para el selector de idioma */
+.banner select {
+  background-color: white;
+  color: #4a4e91;
+  border: 2px solid white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.banner select:hover {
+  background-color: #ffffff;
+  color: #2c3e50;
+}
+
+.banner select:focus {
+  border-color: #2c3e50;
+}
+
+/* 🔹 Alineación del título */
+.banner-title {
+  font-size: 24px;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  text-align: center;
+  flex-grow: 1;
+  margin: 0;
+}

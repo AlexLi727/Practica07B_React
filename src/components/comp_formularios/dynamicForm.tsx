@@ -4,7 +4,13 @@
 * y genera un formulario dinámico
 */
 import React, { useState } from 'react';
+
+import academicEvaluation from "../../assets/Json_data/academicEvaluation.json"; // Importa el JSON de evaluación académica
+import filmSurvey from "../../assets/Json_data/filmSurvey.json";
+import technologySurvey from "../../assets/Json_data/technologySurvey.json";
+import userData from "../../assets/Json_data/userData.json";
 import './dynamicForm.css';
+
 
 /*
 * Interfaz de una pregunta
@@ -61,19 +67,34 @@ interface DynamicFormProps {
     data: Formulario;
 }
 
-/*
-* Componente DynamicForm
-* Genera un formulario dinámico a partir de un objeto de tipo Formulario
-*/
-const DynamicForm: React.FC<DynamicFormProps> = ({ data }) => {
-    const [formData, setFormData] = useState(() => {
-        //Inicializa el objeto de datos del formulario
+const DynamicForm: React.FC = () => {
+    const [form, setForm] = useState(0);
+
+    const changeForm = () => {
+        switch(form){
+            case 0:
+                return academicEvaluation[0];
+            case 1:
+                console.log("1");
+                return filmSurvey[0];
+            case 2:
+                console.log("2");
+                return technologySurvey[0];
+            case 3:
+                console.log("3");
+                return userData[0];
+            default:
+                return academicEvaluation[0];
+        }
+    };
+
+    const [formData, setFormData] = useState(() => { 
         const initialData: Record<string, string | string[]> = {};
-        data.preguntas.forEach(pregunta => {//Recorre las preguntas del formulario
-            //Inicializa la respuesta de la pregunta
+        changeForm().preguntas.forEach(pregunta => {
             initialData[pregunta.id] = pregunta.respuesta || (pregunta.tipo === 'check' ? [] : '');
         });
         return initialData;
+
     });
     //Estado para manejar errores
     const [errores, setErrores] = useState<Record<string, string>>({});
@@ -83,6 +104,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ data }) => {
      * @param id 
      * @param value 
      */
+
     const handleChange = (id: string, value: string | string[]) => {
         //Actualiza el estado de formData con la nueva respuesta
         setFormData(prev => ({
@@ -137,6 +159,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ data }) => {
     
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
     
         const newErrors: Record<string, string> = {};
         let isValid = true;
