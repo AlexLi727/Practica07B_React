@@ -17,14 +17,26 @@
                 "tipo": "select",
                 "pregunta": "¿Qué sistema operativo prefieres usar?",
                 "respuesta": "Linux",
-                "opciones": ["Windows", "Linux", "MacOS"]
+                "opciones": [
+                    "Windows",
+                    "Linux",
+                    "MacOS"
+                ]
             },
             {
                 "id": "productos",
                 "tipo": "check",
                 "pregunta": "¿Qué dispositivos usas regularmente? (Selecciona hasta 2 opciones)",
-                "respuesta": ["smartphone"],
-                "opciones": ["smartphone", "laptop", "tablet", "smartwatch"],
+                "respuesta": [
+                    "smartphone"
+                ],
+                "opciones": [
+                    "smartphone",
+                    "laptop",
+                    "tablet",
+                    "smartwatch"
+                ],
+                "requerido": true,
                 "validacion": {
                     "max_seleccionados": 2
                 }
@@ -34,7 +46,18 @@
                 "tipo": "select",
                 "pregunta": "¿Cuántas horas a la semana dedicas a aprender sobre tecnología?",
                 "respuesta": "5",
-                "opciones": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+                "opciones": [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                    "6",
+                    "7",
+                    "8",
+                    "9",
+                    "10"
+                ]
             }
         ]
     }

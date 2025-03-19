@@ -17,14 +17,24 @@
                 "tipo": "select",
                 "pregunta": "¿Qué tan satisfecho estás con el contenido del curso?",
                 "respuesta": "4",
-                "opciones": ["1", "2", "3", "4", "5"]
+                "opciones": [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                ]
             },
             {
                 "id": "asistencia",
                 "tipo": "check",
                 "pregunta": "¿Asististe a todas las clases?",
-                "respuesta": "no",
-                "opciones": ["sí", "no"]
+                "respuesta": [],
+                "opciones": [
+                    "sí",
+                    "no"
+                ],
+                "requerido": true
             },
             {
                 "id": "horarios",
@@ -40,7 +50,8 @@
                 ],
                 "validacion": {
                     "max_seleccionados": 2
-                }
+                },
+                "requerido": true
             }
         ]
     }
