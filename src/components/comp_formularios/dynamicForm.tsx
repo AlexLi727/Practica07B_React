@@ -201,6 +201,17 @@ const DynamicForm: React.FC<DynamicFormProps> = () => {
         setErrores(newErrors);
 
         if (isValid) {
+            changeForm().preguntas.forEach(pregunta => {
+                console.log(pregunta.id);
+                const value = formData[pregunta.id] as string;
+                if(Array.isArray(value)){
+                    value.forEach(respuesta => {
+                        console.log(respuesta)
+                    })
+                }
+                
+                // localStorage.setItem(pregunta.id, value)
+            })
             console.log('Form Data:', formData);
             setCargando(true);
             setForm(form + 1);
