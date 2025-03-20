@@ -42,9 +42,9 @@ const Banner: React.FC<BannerProps> = ({ title }) => {
       {/* Selector de idioma con un icono de globo */}
       <div className="banner-lang">
         <i className="fas fa-globe"></i> {/* Icono de cambio de idioma */}
-        <select 
-          name="lang" 
-          id="lang" 
+        <select
+          name="lang"
+          id="lang"
           onChange={handleLanguageChange} // Maneja el cambio de idioma.
           value={i18n.language} // Mantiene el idioma seleccionado.
         >

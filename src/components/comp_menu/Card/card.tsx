@@ -6,7 +6,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next"; // Importa el hook de traducción.
 import "./Card.css"; // Importa los estilos del Card.
-import Button from "../Button/button"; // Importa el componente de botón.
+
 
 /*
 * Componente funcional Card
@@ -19,6 +19,7 @@ const Card: React.FC = () => {
     <section className="card">
       {/* Título traducido dinámicamente */}
       <h3 className="title">{t("card.title")}</h3>
+
       <p className="content">{t("card.content")}</p>
 
 
@@ -49,10 +50,9 @@ const Card: React.FC = () => {
 
       {/* Mensaje final con un consejo */}
       <p>{t("card.advice")}</p>
-
-      {/* Botón para comenzar el cuestionario */}
-      <Button action={t("card.start_button")} />
+      <img src="/src/assets/images/forms.png" alt="" className="forms-image" />
     </section>
+
 
   );
 };
