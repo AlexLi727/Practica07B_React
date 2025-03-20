@@ -179,8 +179,8 @@ const DynamicForm: React.FC<DynamicFormProps> = () => {
 
         console.log(formData);
         console.log(form);
-        setCargando(true);
-        setForm(form+1);
+        
+        
 
         // Aquí puedes manejar el envío de datos
 
@@ -202,8 +202,8 @@ const DynamicForm: React.FC<DynamicFormProps> = () => {
 
         if (isValid) {
             console.log('Form Data:', formData);
+            setCargando(true);
             setForm(form + 1);
-            setFormData(changeData);
         }
 
     };
