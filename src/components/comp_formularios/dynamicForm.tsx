@@ -67,11 +67,11 @@ interface DynamicFormProps {
     data: Formulario;
 }
 
-const DynamicForm: React.FC<DynamicFormProps> = ({data}) => {
+const DynamicForm: React.FC<DynamicFormProps> = ({ data }) => {
     const [form, setForm] = useState(0);
 
     const changeForm = () => {
-        switch(form){
+        switch (form) {
             case 0:
                 return userData[0];
             case 1:
@@ -88,7 +88,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({data}) => {
         }
     };
 
-    const [formData, setFormData] = useState(() => { 
+    const [formData, setFormData] = useState(() => {
         const initialData: Record<string, string | string[]> = {};
         changeForm().preguntas.forEach(pregunta => {
             initialData[pregunta.id] = pregunta.respuesta || (pregunta.tipo === 'check' ? [] : '');
@@ -97,7 +97,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({data}) => {
 
     }
     );
-    
+
     const changeData = () => {
         const initialData: Record<string, string | string[]> = {};
         changeForm().preguntas.forEach(pregunta => {
@@ -107,7 +107,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({data}) => {
     }
 
 
-    
+
     //Estado para manejar errores
     const [errores, setErrores] = useState<Record<string, string>>({});
 
@@ -138,7 +138,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({data}) => {
                 }));
             }
             //En este caso, se valida que el campo contenga una fecha válida
-        }else if (id === 'fecha_nacimiento') {
+        } else if (id === 'fecha_nacimiento') {
             const regex = /^\d{2}\/\d{2}\/\d{4}$/;
             if (!regex.test(value as string)) {
                 setErrores(prev => ({
@@ -152,7 +152,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({data}) => {
                 }));
             }
             //En este caso, se valida que el campo contenga un email válido acabado en @stucom.com
-        } else if (id === 'email'){
+        } else if (id === 'email') {
             const regex = /^[a-zA-Z0-9._%+-]+@stucom\.com$/;
             if (!regex.test(value as string)) {
                 setErrores(prev => ({
@@ -174,18 +174,17 @@ const DynamicForm: React.FC<DynamicFormProps> = ({data}) => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log('Form Data:', formData);
-        
+
         console.log(formData);
         console.log(form);
-        setForm(form+1);
-        setFormData(changeData);
+
         // Aquí puedes manejar el envío de datos
 
         const newErrors: Record<string, string> = {};
         let isValid = true;
-    
+
         // Validar todos los campos check requeridos
-        data.preguntas.forEach(pregunta => {
+        changeForm().preguntas.forEach(pregunta => {
             if (pregunta.tipo === 'check' && pregunta.requerido) {
                 const value = formData[pregunta.id] as string[];
                 if (value.length === 0) {
@@ -194,13 +193,13 @@ const DynamicForm: React.FC<DynamicFormProps> = ({data}) => {
                 }
             }
         });
-    
+
         setErrores(newErrors);
-    
+
         if (isValid) {
             console.log('Form Data:', formData);
-        } else {
-            alert('Por favor, completa todos los campos obligatorios');
+            setForm(form + 1);
+            setFormData(changeData);
         }
 
     };
@@ -271,6 +270,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({data}) => {
                                             {opcion}
                                         </div>
                                     ))}
+                                    {errores[pregunta.id] && (
+                                        <span className="text-danger">{errores[pregunta.id]}</span>
+                                    )}
                                 </div>
                             );
                         case 'text':
