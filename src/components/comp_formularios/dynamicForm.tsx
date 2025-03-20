@@ -295,7 +295,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({data}) => {
                             return null;
                     }
                 })}
-                <button type="submit" className="btn btn-success btn-lg">Enviar</button>
+                <button type="submit" className="btn btn-lg">Enviar</button>
             </form>
         </div>
     );

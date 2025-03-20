@@ -1,6 +1,6 @@
 import React from "react";
 import "./Button.css";
-import App from "../../../App";
+
 
 interface ButtonProps {
     // action: string;
@@ -12,7 +12,7 @@ interface ButtonProps {
 
 const Button: React.FC<ButtonProps> = ({ onClick } ) => {
     return (
-        <button onClick={onClick}>Prueba</button>
+        <button onClick={onClick}>Comenzar</button>
     );
 };
 
