@@ -3,7 +3,7 @@
 * Este componente recibe un objeto de tipo Formulario 
 * y genera un formulario dinámico
 */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import academicEvaluation from "../../assets/Json_data/academicEvaluation.json"; // Importa el JSON de evaluación académica
 import filmSurvey from "../../assets/Json_data/filmSurvey.json";
@@ -67,13 +67,14 @@ interface DynamicFormProps {
     data: Formulario;
 }
 
-const DynamicForm: React.FC<DynamicFormProps> = ({ data }) => {
+const DynamicForm: React.FC<DynamicFormProps> = () => {
     const [form, setForm] = useState(0);
+    const [cargando, setCargando] = useState(true);
 
     const changeForm = () => {
         switch (form) {
             case 0:
-                return userData[0];
+                return academicEvaluation[0];
             case 1:
                 console.log("form 1");
                 return userData[0];
@@ -88,15 +89,16 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ data }) => {
         }
     };
 
-    const [formData, setFormData] = useState(() => {
+    const changeSetFormData = () => { 
+        console.log("porfa" + form)
         const initialData: Record<string, string | string[]> = {};
         changeForm().preguntas.forEach(pregunta => {
             initialData[pregunta.id] = pregunta.respuesta || (pregunta.tipo === 'check' ? [] : '');
         });
         return initialData;
-
-    }
-    );
+    };
+    const [formData, setFormData] = useState(changeSetFormData);
+    
 
     const changeData = () => {
         const initialData: Record<string, string | string[]> = {};
@@ -177,6 +179,8 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ data }) => {
 
         console.log(formData);
         console.log(form);
+        setCargando(true);
+        setForm(form+1);
 
         // Aquí puedes manejar el envío de datos
 
@@ -203,6 +207,16 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ data }) => {
         }
 
     };
+
+    useEffect(() => {
+        console.log("xivimerienda")
+        setFormData(changeSetFormData);
+        setCargando(false);
+       }, [form])
+    
+       if(cargando){
+        return "xavi li lee"
+       }
     /*
     * Genera el formulario dinámico
     * Recorre las preguntas del formulario y genera los campos correspondientes
