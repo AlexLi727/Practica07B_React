@@ -3,7 +3,7 @@
 * Este componente recibe un objeto de tipo Formulario 
 * y genera un formulario dinámico
 */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import academicEvaluation from "../../assets/Json_data/academicEvaluation.json"; // Importa el JSON de evaluación académica
 import filmSurvey from "../../assets/Json_data/filmSurvey.json";
@@ -68,13 +68,15 @@ interface DynamicFormProps {
 }
 
 const DynamicForm: React.FC<DynamicFormProps> = ({data}) => {
+    
     const [form, setForm] = useState(0);
+    const [cargando, setCargando] = useState(true);
 
     const changeForm = () => {
         switch(form){
             case 0:
-                return userData[0];
-            case 1:
+                return academicEvaluation[0];
+            case 1:             
                 console.log("form 1");
                 return userData[0];
             case 2:
@@ -82,22 +84,24 @@ const DynamicForm: React.FC<DynamicFormProps> = ({data}) => {
                 return technologySurvey[0];
             case 3:
                 console.log("form 3");
-                return userData[0];
+                return filmSurvey[0];
             default:
-                return academicEvaluation[0];
+                return filmSurvey[0];
         }
     };
 
-    const [formData, setFormData] = useState(() => { 
+    
+    
+    const changeSetFormData = () => { 
+        console.log("porfa" + form)
         const initialData: Record<string, string | string[]> = {};
         changeForm().preguntas.forEach(pregunta => {
             initialData[pregunta.id] = pregunta.respuesta || (pregunta.tipo === 'check' ? [] : '');
         });
         return initialData;
+    };
+    const [formData, setFormData] = useState(changeSetFormData);
 
-    }
-    );
-    
     const changeData = () => {
         const initialData: Record<string, string | string[]> = {};
         changeForm().preguntas.forEach(pregunta => {
@@ -106,8 +110,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({data}) => {
         return initialData;
     }
 
-
-    
     //Estado para manejar errores
     const [errores, setErrores] = useState<Record<string, string>>({});
 
@@ -173,12 +175,10 @@ const DynamicForm: React.FC<DynamicFormProps> = ({data}) => {
      */
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        setCargando(true);
+        setForm(form+1);
         console.log('Form Data:', formData);
         
-        console.log(formData);
-        console.log(form);
-        setForm(form+1);
-        setFormData(changeData);
         // Aquí puedes manejar el envío de datos
 
         const newErrors: Record<string, string> = {};
@@ -204,6 +204,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({data}) => {
         }
 
     };
+
     /*
     * Genera el formulario dinámico
     * Recorre las preguntas del formulario y genera los campos correspondientes
@@ -213,11 +214,26 @@ const DynamicForm: React.FC<DynamicFormProps> = ({data}) => {
     * Al enviar el formulario, se muestra en consola el objeto formData
     * con las respuestas del formulario
     */
+   useEffect(() => {
+    console.log("xivimerienda")
+    setFormData(changeSetFormData);
+    setCargando(false);
+   }, [form])
+
+   if(cargando){
+    return "xavi li lee"
+   }
+
     return (
         <div className="container d-flex justify-content-center">
             <form onSubmit={handleSubmit}>
                 <h2>{changeForm().titulo}</h2>
                 <hr />
+                {/* {changeForm().preguntas.map(pregunta => {
+                    <h1>{pregunta.tipo}</h1>
+                    console.log("Karrigan" + formData)
+                    return "formData[pregunta.id] "
+                })} */}
                 {changeForm().preguntas.map(pregunta => {
                     switch (pregunta.tipo) {
                         case 'textarea':
@@ -250,7 +266,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({data}) => {
                             return (
                                 <div className="mb-3" key={pregunta.id}>
                                     <label>{pregunta.pregunta}</label>
-                                    {pregunta.opciones?.map(opcion => (
+                                    {pregunta.opciones?.map(opcion => (      
                                         <div key={opcion}>
                                             <input className="form-check-input mx-3"
                                                 type="checkbox"
