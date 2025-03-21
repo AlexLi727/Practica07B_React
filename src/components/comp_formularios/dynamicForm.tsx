@@ -206,6 +206,11 @@ const DynamicForm: React.FC<DynamicFormProps> = () => {
         }
 
     };
+    //Funcion para cambiar de la pagina de respuestas al formulario
+    const restartForm = () => {
+        setCargando(true);
+        setForm(0);
+    }
     /*
     * Se ejecuta al cambiar de formulario
     * Cambia el json que contiene los datos del formulario
@@ -215,13 +220,83 @@ const DynamicForm: React.FC<DynamicFormProps> = () => {
         setFormData(changeSetFormData);
         setCargando(false);
        }, [form])
-
+    
+    /*
+    Vista con los resultados
+    */  
     if(form > 3){
         return (
-            <div>
-                <h1> Manolo de la fuente </h1>
-            </div>
-        )
+            <section className="result">
+                <h3 className="title">Resultados</h3>
+                <hr />
+                <div className='academicEvaluation'>
+                    <h3 className='sub-title'>Resultados de la Evaluacion Academica:</h3>
+                    <ul>
+                        <li>¿Qué mejorarías en el curso?</li>
+                        {localStorage["comentariosAcademic"]}
+                        <li>¿Qué tan satisfecho estás con el contenido del curso?</li>
+                        {localStorage["satisfaccion"]}
+                        <li>¿Asististe a todas las clases?</li>
+                        {localStorage["asistencia"]}
+                        <li>¿Cuáles horarios prefieres para las clases?</li>
+                        {localStorage["horarios0"]}
+                        <br />
+                        {localStorage["horarios1"]}
+                    </ul>
+                </div>
+                <div className='filmSurvey'>
+                    <h3 className='sub-title'>Resultados de Preferencias de Cine:</h3>
+                    <ul>
+                        <li>Qué género de películas prefieres?</li>
+                        {localStorage["comentariosFilm"]}
+                        <li>¿Cuál es tu película favorita? 0</li>
+                        {localStorage["favorito"]}
+                        <li>¿Has visto alguna de las siguientes películas?</li>
+                        {localStorage["vista"]}
+                        <li>¿Con qué frecuencia ves películas?</li>
+                        {localStorage["frecuencia"]}
+                    </ul>
+                </div>
+                <div className='technologySurvey'>
+                    <h3 className='sub-title'>Resultados de Preferencias en Tecnología</h3>
+                    <ul>
+                        <li>¿Qué tecnología te gustaría aprender en el futuro?</li>
+                        {localStorage["comentariosTechnology"]}
+                        <li>¿Qué sistema operativo prefieres usar?</li>
+                        {localStorage["sistema_operativo"]}
+                        <li>¿Qué dispositivos usas regularmente?</li>
+                        {localStorage["productos0"]}
+                        <br />
+                        {localStorage["productos1"]}
+                        <li>¿Cuántas horas a la semana dedicas a aprender sobre tecnología?</li>
+                        {localStorage["tiempo"]}
+                    </ul>
+                </div>
+                <div className='userData'>
+                    <h3 className='sub-title'>Resultados de Datos del Usuario</h3>
+                    <ul>
+                        <li>¿Cuál es tu nombre?</li>
+                        {localStorage["nombre"]}
+                        <li>¿Cuál es tu fecha de nacimiento?</li>
+                        {localStorage["fecha_nacimiento"]}
+                        <li>¿Cuál es tu correo electrónico?</li>
+                        {localStorage["email"]}
+                        <li>¿Cuál es tu sexo?</li>
+                        {localStorage["sexo"]}
+                        <li>¿Qué prefieres hacer en tu tiempo libre?</li>
+                        {localStorage["preferencias0"]}
+                        <br />
+                        {localStorage["preferencias1"]}
+                        <br />
+                        {localStorage["preferencias2"]}
+                        <br />
+                        {localStorage["preferencias3"]}
+    
+                    </ul>
+                    <button onClick={restartForm}> Reiniciar formulario </button>
+                </div>
+            </section>
+        );
     }
     
     /*

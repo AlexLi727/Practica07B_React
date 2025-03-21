@@ -5,7 +5,6 @@ import Card from "./components/comp_menu/Card/card";
 import Footer from "./components/comp_menu/Footer/footer";
 import Button from "./components/comp_menu/Button/button";
 import DynamicForm from "./components/comp_formularios/dynamicForm";
-import result from "./components/comp_result/result";
 
 const App: React.FC = () => {
   const [component, setComponent] = useState(0);
@@ -24,8 +23,8 @@ const App: React.FC = () => {
             <section className="card">
               <Banner title={title} />
               
-              {/* <Card />
-              <Button onClick={changeComponent} /> */}
+              <Card />
+              <Button onClick={changeComponent} />
               <Footer footerAppName={footerAppName} />
             </section>
           </div>

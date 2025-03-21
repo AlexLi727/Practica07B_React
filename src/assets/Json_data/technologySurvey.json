@@ -3,7 +3,7 @@
         "titulo": "Encuesta de Preferencias en Tecnología",
         "preguntas": [
             {
-                "id": "comentarios",
+                "id": "comentariosTechnology",
                 "tipo": "textarea",
                 "pregunta": "¿Qué tecnología te gustaría aprender en el futuro?",
                 "respuesta": "Me gustaría aprender sobre inteligencia artificial y machine learning.",

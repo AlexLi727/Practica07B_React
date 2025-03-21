@@ -3,7 +3,7 @@
         "titulo": "Encuesta de Preferencias de Cine",
         "preguntas": [
             {
-                "id": "comentarios",
+                "id": "comentariosFilm",
                 "tipo": "textarea",
                 "pregunta": "¿Qué género de películas prefieres?",
                 "respuesta": "Acción, ciencia ficción y comedia.",
