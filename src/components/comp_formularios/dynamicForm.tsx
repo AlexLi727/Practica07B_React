@@ -3,7 +3,7 @@
 * Este componente recibe un objeto de tipo Formulario 
 * y genera un formulario dinámico
 */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import academicEvaluation from "../../assets/Json_data/academicEvaluation.json"; // Importa el JSON de evaluación académica
 import filmSurvey from "../../assets/Json_data/filmSurvey.json";
@@ -67,46 +67,36 @@ interface DynamicFormProps {
     data: Formulario;
 }
 
-const DynamicForm: React.FC<DynamicFormProps> = ({ data }) => {
+const DynamicForm: React.FC<DynamicFormProps> = () => {
     const [form, setForm] = useState(0);
+    const [cargando, setCargando] = useState(true);
+    
 
+    // Devuelve un formulario dependiendo del valor del estado "form"
     const changeForm = () => {
         switch (form) {
             case 0:
-                return userData[0];
+                return academicEvaluation[0];
             case 1:
-                console.log("form 1");
                 return userData[0];
             case 2:
-                console.log("form 2");
                 return technologySurvey[0];
             case 3:
-                console.log("form 3");
-                return userData[0];
+                return filmSurvey[0];
             default:
-                return academicEvaluation[0];
+                return filmSurvey[0];
         }
     };
 
-    const [formData, setFormData] = useState(() => {
+    // Devuelve un Record con claves como id de las preguntas y valores vacios
+    const changeSetFormData = () => { 
         const initialData: Record<string, string | string[]> = {};
         changeForm().preguntas.forEach(pregunta => {
             initialData[pregunta.id] = pregunta.respuesta || (pregunta.tipo === 'check' ? [] : '');
         });
         return initialData;
-
-    }
-    );
-
-    const changeData = () => {
-        const initialData: Record<string, string | string[]> = {};
-        changeForm().preguntas.forEach(pregunta => {
-            initialData[pregunta.id] = pregunta.respuesta || (pregunta.tipo === 'check' ? [] : '');
-        });
-        return initialData;
-    }
-
-
+    };
+    const [formData, setFormData] = useState(changeSetFormData);
 
     //Estado para manejar errores
     const [errores, setErrores] = useState<Record<string, string>>({});
@@ -173,13 +163,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ data }) => {
      */
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('Form Data:', formData);
-
-        console.log(formData);
-        console.log(form);
+        console.log('Form Data:', formData);  
 
         // Aquí puedes manejar el envío de datos
-
         const newErrors: Record<string, string> = {};
         let isValid = true;
 
@@ -196,13 +182,56 @@ const DynamicForm: React.FC<DynamicFormProps> = ({ data }) => {
 
         setErrores(newErrors);
 
+        
+        /*
+        * Se ejecuta luego de un submit y comprobando que los datos introducidos en los formularios sean válidos
+        * Recoge el valor de los formularios y lo almacena en localStorage
+        */
         if (isValid) {
-            console.log('Form Data:', formData);
+            changeForm().preguntas.forEach(pregunta => {
+                const value = formData[pregunta.id] as string;
+                if(Array.isArray(value)){
+                    var count = 0;
+                    value.forEach(respuesta => {
+                        localStorage.setItem(pregunta.id + count, respuesta);
+                        count++;
+                    })
+                }else{
+                    localStorage.setItem(pregunta.id, value)
+                }
+                
+            })
+            setCargando(true);
             setForm(form + 1);
-            setFormData(changeData);
         }
 
     };
+    /*
+    * Se ejecuta al cambiar de formulario
+    * Cambia el json que contiene los datos del formulario
+    * Al terminar cambia el estado de la pantalla de carga
+    */  
+    useEffect(() => {
+        setFormData(changeSetFormData);
+        setCargando(false);
+       }, [form])
+
+    if(form > 3){
+        return (
+            <div>
+                <h1> Manolo de la fuente </h1>
+            </div>
+        )
+    }
+    
+    /*
+    * Devuelve una pantalla de carga si los datos de los states no estan cargados
+    */   
+    if(cargando){
+        return "Cargando componente"
+    }
+
+    
     /*
     * Genera el formulario dinámico
     * Recorre las preguntas del formulario y genera los campos correspondientes
