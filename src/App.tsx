@@ -12,7 +12,6 @@ const App: React.FC = () => {
   const footerAppName= "Quizly";
 
   const changeComponent = () => {
-    console.log("hola");
     setComponent(1);
   }
 
