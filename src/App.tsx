@@ -15,27 +15,24 @@ const App: React.FC = () => {
     setComponent(1);
   }
 
-  switch (component) {
-    case 0:
-      return (
-        <>
-          <div className="body">
-            <section className="card">
-              <Banner title={title} />
-              
-              <Card />
-              <Button onClick={changeComponent} />
-              <Footer footerAppName={footerAppName} />
-            </section>
-          </div>
+  return (
+    <div className="body">
+      <section className="card">
+        <Banner title={title} />
+        {component === 0 ? (
+          <>
+            <Card />
+            <Button onClick={changeComponent} />
+          </>
+        ) : (
+          <DynamicForm />
+        )}
 
-        </>
-      );
-    case 1:
-      return (
-        <DynamicForm></DynamicForm>
-      )
-  }
-}
+      </section>
+      <Footer footerAppName={footerAppName} />
+    </div>
+  );
+};
+
 
 export default App;

@@ -1,68 +1,97 @@
 body {
-  background-color: #4a4e91 !important; /* Color de fondo azul */
-  font-family: "Arial, sans-serif"; /* Fuente del texto */
-  color: black !important; /* Color del texto */
+  background-color: #4a4e91 !important;
+  /* Color de fondo azul */
+  font-family: "Arial, sans-serif";
+  /* Fuente del texto */
+  color: black !important;
+  /* Color del texto */
 }
 
 h2 {
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  text-align: center; /* Centrar el título */
-  font-size: 2rem; /* Tamaño del título */
-  margin-bottom: 20px; /* Espacio por debajo del título */
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
 }
 
 .mb-3 {
-  margin-bottom: 15px; /* Espaciado entre preguntas */
+  margin-bottom: 20px;
+  /* Espaciado entre preguntas */
+  display: flex;
+  flex-direction: column;
+  /* Pone label, input y error en columna */
+  align-items: flex-start;
+  width: 100%;
+  min-height: 130px;
+  /* Evita que el formulario se encoja al mostrar errores */
 }
 
 label {
-  font-weight: bold; /* Negrita para las etiquetas */
+  font-weight: bold;
+  margin-bottom: 8px;
 }
 
-button {
-  display: block; /* Centrar botón */
-  width: 100%; /* Botón ocupa todo el ancho */
-  padding: 10px; /* Espaciado interior del botón */
-  background-color: #ffc107 !important; /* Color del botón */
-  border: none; /* Sin borde */
-  color: #000; /* Color del texto en el botón */
-  font-weight: bold; /* Negrita para el texto del botón */
-  cursor: pointer; /* Cambio del cursor al pasar sobre el botón */
-  transition: background-color 0.3s; /* Efecto de transición en el color de fondo */
-}
-
-button:hover {
-  background-color: #ffd600 !important; /* Color al pasar el ratón */
-  color: green !important; /* Color del texto al pasar el ratón */
-}
-
+input[type="text"],
 textarea,
 select {
-  border-radius: 5px; /* Bordes redondeados */
-  border: none; /* Sin borde */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15) !important; /* Sombra */
+  border-radius: 5px;
+  border: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15) !important;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 5px;
 }
 
 textarea {
-  width: 100%; /* Ocupar todo el ancho */
-  padding: 10px; /* Espaciado interior */
+  resize: vertical;
 }
 
 select {
-  width: 25%; /* Ocupar todo el ancho */
-  padding: 10px; /* Espaciado interior */
+  width: 100%;
+}
+
+input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.text-danger {
+  color: red !important;
+  font-size: 0.9rem;
+  margin-top: 2px;
+  min-height: 18px;
+  /* Para reservar espacio aunque no haya error */
 }
 
 form {
   background-image: linear-gradient(135deg, #d4eaff 0%, #b3d4ff 100%);
-  padding: 20px; /* Espaciado interior */
+  padding: 20px;
   margin-top: 10%;
-  border-radius: 5px; /* Bordes redondeados */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15) !important; /* Sombra */
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15) !important;
+  max-width: 600px;
+  width: 100%;
+}
+
+button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #ffc107 !important;
+  border: none;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+}
+
+button:hover {
+  background-color: #ffd600 !important;
+  color: green !important;
 }
 
 /* Estilos para pagina de resultados */
-.result{
+.result {
   max-width: 800px;
   margin: 60px auto 0 auto;
   background-image: linear-gradient(135deg, #d4eaff 0%, #b3d4ff 100%);
@@ -74,17 +103,40 @@ form {
   color: black;
 }
 
-.title{
+.title {
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   font-size: 35px;
   text-align: center;
 }
 
-.sub-title{
+.sub-title {
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   font-size: 25px;
 }
 
-li{
+li {
   color: #2c3e50;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.limpiar {
+  background-color: #dc3545 !important;
+  /* Rojo Bootstrap */
+  color: white;
+}
+
+.limpiar:hover {
+  background-color: #c82333 !important;
+  color: white !important;
+}
+
+.enviar {
+  background-color: #ffc107 !important;
+  color: black;
 }

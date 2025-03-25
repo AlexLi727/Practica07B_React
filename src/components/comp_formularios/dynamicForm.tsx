@@ -1,16 +1,10 @@
-/*
-* Generación del componente DynamicForm
-* Este componente recibe un objeto de tipo Formulario 
-* y genera un formulario dinámico
-*/
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import academicEvaluation from "../../assets/Json_data/academicEvaluation.json"; // Importa el JSON de evaluación académica
+import academicEvaluation from "../../assets/Json_data/academicEvaluation.json";
 import filmSurvey from "../../assets/Json_data/filmSurvey.json";
 import technologySurvey from "../../assets/Json_data/technologySurvey.json";
 import userData from "../../assets/Json_data/userData.json";
 import './dynamicForm.css';
-
 
 /*
 * Interfaz de una pregunta
@@ -70,36 +64,62 @@ interface DynamicFormProps {
 const DynamicForm: React.FC<DynamicFormProps> = () => {
     const [form, setForm] = useState(0);
     const [cargando, setCargando] = useState(true);
-    
+    const [errores, setErrores] = useState<Record<string, string>>({});
+    const [formData, setFormData] = useState<Record<string, string | string[]>>({});
 
-    // Devuelve un formulario dependiendo del valor del estado "form"
-    const changeForm = () => {
-        switch (form) {
-            case 0:
-                return academicEvaluation[0];
-            case 1:
-                return userData[0];
-            case 2:
-                return technologySurvey[0];
-            case 3:
-                return filmSurvey[0];
-            default:
-                return filmSurvey[0];
+    // Lista de formularios disponibles
+    const formularios = [academicEvaluation[0], userData[0], technologySurvey[0], filmSurvey[0]];
+
+    // Devuelve el formulario correspondiente al estado actual
+    const changeForm = () => formularios[form] || filmSurvey[0];
+
+    // Funciones de utilidad para guardar y leer localStorage con soporte a arrays (JSON)
+    const guardarEnLocalStorage = (key: string, value: string | string[]) => {
+        localStorage.setItem(key, JSON.stringify(value));
+    };
+
+    const leerDeLocalStorage = (key: string): string | string[] | null => {
+        const value = localStorage.getItem(key);
+        try {
+            return value ? JSON.parse(value) : null;
+        } catch {
+            return value;
         }
     };
 
-    // Devuelve un Record con claves como id de las preguntas y valores vacios
-    const changeSetFormData = () => { 
-        const initialData: Record<string, string | string[]> = {};
-        changeForm().preguntas.forEach(pregunta => {
-            initialData[pregunta.id] = pregunta.respuesta || (pregunta.tipo === 'check' ? [] : '');
+    // Elimina del localStorage las claves relacionadas al formulario actual
+    const limpiarLocalStorageDelFormulario = () => {
+        changeForm().preguntas.forEach(p => {
+            localStorage.removeItem(p.id);
         });
-        return initialData;
+        setFormData(inicializarFormData()); // Reinicia los datos en pantalla
+        setErrores({}); // Limpia los errores visuales
     };
-    const [formData, setFormData] = useState(changeSetFormData);
 
-    //Estado para manejar errores
-    const [errores, setErrores] = useState<Record<string, string>>({});
+    // Devuelve un Record con claves como id de las preguntas y valores iniciales o recuperados
+    const inicializarFormData = () => {
+        const initial: Record<string, string | string[]> = {};
+        changeForm().preguntas.forEach(p => {
+            const stored = leerDeLocalStorage(p.id);
+            if (stored !== null) {
+                initial[p.id] = stored;
+            } else {
+                initial[p.id] = p.tipo === 'check' ? [] : '';
+            }
+        });
+        return initial;
+    };
+
+    /*
+    * Se ejecuta al cambiar de formulario
+    * Cambia el json que contiene los datos del formulario
+    * Al terminar cambia el estado de la pantalla de carga
+    * Y recupera los datos almacenados (si los hay) desde localStorage
+    */
+    useEffect(() => {
+        setFormData(inicializarFormData());
+        setCargando(false);
+    }, [form]);
 
     /**
      * Funcion handleChange que se ejecutara a medida que el usuario vaya rellenando el formulario 
@@ -107,65 +127,29 @@ const DynamicForm: React.FC<DynamicFormProps> = () => {
      * @param value 
      */
     const handleChange = (id: string, value: string | string[]) => {
-        //Actualiza el estado de formData con la nueva respuesta
-        setFormData(prev => ({
-            ...prev,
-            [id]: value
-        }));
-        //En funcion de la ID de la pregunta, se aplican las validaciones correspondientes
-        //En este caso, se valida que el campo nombre solo contenga letras y espacios
-        if (id == 'nombre') {
-            const regex = /^[a-zA-ZÀ-ÿ\s]*$/; //incluimos caracteres como la ç, la ñ, las tildes y las diéresis
-            if (!regex.test(value as string)) {
-                setErrores(prev => ({
-                    ...prev,
-                    [id]: 'Solo se permiten letras y espacios'
-                }));
-            } else {
-                setErrores(prev => ({
-                    ...prev,
-                    [id]: ''
-                }));
-            }
-            //En este caso, se valida que el campo contenga una fecha válida
+        setFormData(prev => ({ ...prev, [id]: value }));
+
+        // Validaciones personalizadas
+        if (id === 'nombre') {
+            const regex = /^[a-zA-ZÀ-ÿ\s]*$/;
+            setErrores(prev => ({ ...prev, [id]: regex.test(value as string) ? '' : 'Solo se permiten letras y espacios' }));
         } else if (id === 'fecha_nacimiento') {
             const regex = /^\d{2}\/\d{2}\/\d{4}$/;
-            if (!regex.test(value as string)) {
-                setErrores(prev => ({
-                    ...prev,
-                    [id]: 'Formato de fecha incorrecto. Debe ser dd/mm/yyyy'
-                }));
-            } else {
-                setErrores(prev => ({
-                    ...prev,
-                    [id]: ''
-                }));
-            }
-            //En este caso, se valida que el campo contenga un email válido acabado en @stucom.com
+            setErrores(prev => ({ ...prev, [id]: regex.test(value as string) ? '' : 'Formato de fecha incorrecto. Debe ser dd/mm/yyyy' }));
         } else if (id === 'email') {
             const regex = /^[a-zA-Z0-9._%+-]+@stucom\.com$/;
-            if (!regex.test(value as string)) {
-                setErrores(prev => ({
-                    ...prev,
-                    [id]: 'Formato de email incorrecto'
-                }));
-            } else {
-                setErrores(prev => ({
-                    ...prev,
-                    [id]: ''
-                }));
-            }
+            setErrores(prev => ({ ...prev, [id]: regex.test(value as string) ? '' : 'Formato de email incorrecto' }));
         }
     };
+
     /**
      * Funcion handleSubmit que ejecutara las validaciones unicamente al enviar el formulario
      * @param e 
      */
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('Form Data:', formData);  
+        console.log('Form Data:', formData);
 
-        // Aquí puedes manejar el envío de datos
         const newErrors: Record<string, string> = {};
         let isValid = true;
 
@@ -173,7 +157,7 @@ const DynamicForm: React.FC<DynamicFormProps> = () => {
         changeForm().preguntas.forEach(pregunta => {
             if (pregunta.tipo === 'check' && pregunta.requerido) {
                 const value = formData[pregunta.id] as string[];
-                if (value.length === 0) {
+                if (!value || value.length === 0) {
                     newErrors[pregunta.id] = 'Una selección obligatoria';
                     isValid = false;
                 }
@@ -182,131 +166,63 @@ const DynamicForm: React.FC<DynamicFormProps> = () => {
 
         setErrores(newErrors);
 
-        
         /*
         * Se ejecuta luego de un submit y comprobando que los datos introducidos en los formularios sean válidos
         * Recoge el valor de los formularios y lo almacena en localStorage
         */
         if (isValid) {
-            changeForm().preguntas.forEach(pregunta => {
-                const value = formData[pregunta.id] as string;
-                if(Array.isArray(value)){
-                    var count = 0;
-                    value.forEach(respuesta => {
-                        localStorage.setItem(pregunta.id + count, respuesta);
-                        count++;
-                    })
-                }else{
-                    localStorage.setItem(pregunta.id, value)
-                }
-                
-            })
+            changeForm().preguntas.forEach(p => {
+                guardarEnLocalStorage(p.id, formData[p.id]);
+            });
             setCargando(true);
             setForm(form + 1);
         }
-
     };
+
     //Funcion para cambiar de la pagina de respuestas al formulario
     const restartForm = () => {
-        setCargando(true);
+        formularios.forEach(f => {
+            f.preguntas.forEach(p => {
+                localStorage.removeItem(p.id);
+            });
+        });
         setForm(0);
-    }
+        setCargando(true);
+    };
+
     /*
-    * Se ejecuta al cambiar de formulario
-    * Cambia el json que contiene los datos del formulario
-    * Al terminar cambia el estado de la pantalla de carga
-    */  
-    useEffect(() => {
-        setFormData(changeSetFormData);
-        setCargando(false);
-       }, [form])
-    
-    /*
-    Vista con los resultados
-    */  
-    if(form > 3){
+    * Vista con los resultados
+    */
+    if (form > 3) {
         return (
             <section className="result">
                 <h3 className="title">Resultados</h3>
                 <hr />
-                <div className='academicEvaluation'>
-                    <h3 className='sub-title'>Resultados de la Evaluacion Academica:</h3>
-                    <ul>
-                        <li>¿Qué mejorarías en el curso?</li>
-                        {localStorage["comentariosAcademic"]}
-                        <li>¿Qué tan satisfecho estás con el contenido del curso?</li>
-                        {localStorage["satisfaccion"]}
-                        <li>¿Asististe a todas las clases?</li>
-                        {localStorage["asistencia"]}
-                        <li>¿Cuáles horarios prefieres para las clases?</li>
-                        {localStorage["horarios0"]}
-                        <br />
-                        {localStorage["horarios1"]}
-                    </ul>
-                </div>
-                <div className='filmSurvey'>
-                    <h3 className='sub-title'>Resultados de Preferencias de Cine:</h3>
-                    <ul>
-                        <li>Qué género de películas prefieres?</li>
-                        {localStorage["comentariosFilm"]}
-                        <li>¿Cuál es tu película favorita? 0</li>
-                        {localStorage["favorito"]}
-                        <li>¿Has visto alguna de las siguientes películas?</li>
-                        {localStorage["vista"]}
-                        <li>¿Con qué frecuencia ves películas?</li>
-                        {localStorage["frecuencia"]}
-                    </ul>
-                </div>
-                <div className='technologySurvey'>
-                    <h3 className='sub-title'>Resultados de Preferencias en Tecnología</h3>
-                    <ul>
-                        <li>¿Qué tecnología te gustaría aprender en el futuro?</li>
-                        {localStorage["comentariosTechnology"]}
-                        <li>¿Qué sistema operativo prefieres usar?</li>
-                        {localStorage["sistema_operativo"]}
-                        <li>¿Qué dispositivos usas regularmente?</li>
-                        {localStorage["productos0"]}
-                        <br />
-                        {localStorage["productos1"]}
-                        <li>¿Cuántas horas a la semana dedicas a aprender sobre tecnología?</li>
-                        {localStorage["tiempo"]}
-                    </ul>
-                </div>
-                <div className='userData'>
-                    <h3 className='sub-title'>Resultados de Datos del Usuario</h3>
-                    <ul>
-                        <li>¿Cuál es tu nombre?</li>
-                        {localStorage["nombre"]}
-                        <li>¿Cuál es tu fecha de nacimiento?</li>
-                        {localStorage["fecha_nacimiento"]}
-                        <li>¿Cuál es tu correo electrónico?</li>
-                        {localStorage["email"]}
-                        <li>¿Cuál es tu sexo?</li>
-                        {localStorage["sexo"]}
-                        <li>¿Qué prefieres hacer en tu tiempo libre?</li>
-                        {localStorage["preferencias0"]}
-                        <br />
-                        {localStorage["preferencias1"]}
-                        <br />
-                        {localStorage["preferencias2"]}
-                        <br />
-                        {localStorage["preferencias3"]}
-    
-                    </ul>
-                    <button onClick={restartForm}> Reiniciar formulario </button>
-                </div>
+                {formularios.map(f => (
+                    <div key={f.titulo}>
+                        <h3 className="sub-title">Resultados de: {f.titulo}</h3>
+                        <ul>
+                            {f.preguntas.map(p => {
+                                const respuesta = leerDeLocalStorage(p.id);
+                                if (Array.isArray(respuesta)) {
+                                    return respuesta.map((r, i) => <li key={p.id + i}>{r}</li>);
+                                } else {
+                                    return <li key={p.id}>{respuesta}</li>;
+                                }
+                            })}
+                        </ul>
+                    </div>
+                ))}
+                <button onClick={restartForm}>Reiniciar formulario</button>
             </section>
         );
     }
-    
+
     /*
     * Devuelve una pantalla de carga si los datos de los states no estan cargados
-    */   
-    if(cargando){
-        return "Cargando componente"
-    }
+    */
+    if (cargando) return <p>Cargando componente...</p>;
 
-    
     /*
     * Genera el formulario dinámico
     * Recorre las preguntas del formulario y genera los campos correspondientes
@@ -318,93 +234,98 @@ const DynamicForm: React.FC<DynamicFormProps> = () => {
     */
     return (
         <div className="container d-flex justify-content-center">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="formulario-container">
                 <h2>{changeForm().titulo}</h2>
                 <hr />
-                {changeForm().preguntas.map(pregunta => {
-                    switch (pregunta.tipo) {
+                {changeForm().preguntas.map(p => {
+                    switch (p.tipo) {
                         case 'textarea':
                             return (
-                                <div className="mb-3" key={pregunta.id}>
-                                    <label>{pregunta.pregunta}</label>
+                                <div className="mb-3" key={p.id}>
+                                    <label>{p.pregunta}</label>
                                     <textarea
-                                        value={formData[pregunta.id] as string}
-                                        onChange={(e) => handleChange(pregunta.id, e.target.value)}
-                                        minLength={pregunta.restricciones?.min}
-                                        maxLength={pregunta.restricciones?.max}
-                                        required />
+                                        value={formData[p.id] as string}
+                                        onChange={(e) => handleChange(p.id, e.target.value)}
+                                        minLength={p.restricciones?.min}
+                                        maxLength={p.restricciones?.max}
+                                        required
+                                    />
+                                    {errores[p.id] && <div className="text-danger">{errores[p.id]}</div>}
                                 </div>
                             );
                         case 'select':
                             return (
-                                <div className="mb-3" key={pregunta.id}>
-                                    <label>{pregunta.pregunta}</label>
-                                    <select className="mx-3 my-3"
-                                        value={formData[pregunta.id] as string}
-                                        onChange={(e) => handleChange(pregunta.id, e.target.value)}
+                                <div className="mb-3" key={p.id}>
+                                    <label>{p.pregunta}</label>
+                                    <select
+                                        value={formData[p.id] as string}
+                                        onChange={(e) => handleChange(p.id, e.target.value)}
                                     >
-                                        {pregunta.opciones?.map(opcion => (
-                                            <option key={opcion} value={opcion}>{opcion}</option>
+                                        {p.opciones?.map(op => (
+                                            <option key={op} value={op}>{op}</option>
                                         ))}
                                     </select>
+                                    {errores[p.id] && <div className="text-danger">{errores[p.id]}</div>}
                                 </div>
                             );
                         case 'check':
                             return (
-                                <div className="mb-3" key={pregunta.id}>
-                                    <label>{pregunta.pregunta}</label>
-                                    {pregunta.opciones?.map(opcion => (
-                                        <div key={opcion}>
-                                            <input className="form-check-input mx-3"
-                                                type="checkbox"
-                                                checked={(formData[pregunta.id] as string[]).includes(opcion)}
-                                                onChange={(e) => {
-                                                    const newValue = e.target.checked
-                                                        ? [...(formData[pregunta.id] as string[]), opcion]
-                                                        : (formData[pregunta.id] as string[]).filter(o => o !== opcion);
-                                                    if (pregunta.validacion?.max_seleccionados) {
-                                                        if (newValue.length <= pregunta.validacion.max_seleccionados) {
-                                                            handleChange(pregunta.id, newValue);
+                                <div className="mb-3" key={p.id}>
+                                    <label>{p.pregunta}</label>
+                                    {p.opciones?.map(op => {
+                                        const seleccionados = formData[p.id] as string[];
+                                        const checked = seleccionados.includes(op);
+                                        return (
+                                            <div key={op}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={checked}
+                                                    onChange={(e) => {
+                                                        let newSeleccion: string[] = checked
+                                                            ? seleccionados.filter(val => val !== op)
+                                                            : [...seleccionados, op];
+                                                        if (p.validacion?.max_seleccionados && newSeleccion.length > p.validacion.max_seleccionados) {
+                                                            return;
                                                         }
-                                                    } else {
-                                                        handleChange(pregunta.id, newValue);
-                                                    }
-                                                }}
-                                            />
-                                            {opcion}
-                                        </div>
-                                    ))}
-                                    {errores[pregunta.id] && (
-                                        <span className="text-danger">{errores[pregunta.id]}</span>
-                                    )}
+                                                        handleChange(p.id, newSeleccion);
+                                                    }}
+                                                />
+                                                {op}
+                                            </div>
+                                        );
+                                    })}
+                                    {errores[p.id] && <div className="text-danger">{errores[p.id]}</div>}
                                 </div>
                             );
                         case 'text':
                             return (
-                                <div className="mb-3" key={pregunta.id}>
-                                    <label>{pregunta.pregunta}</label>
+                                <div className="mb-3" key={p.id}>
+                                    <label>{p.pregunta}</label>
                                     <input
                                         type="text"
-                                        className="form-control"
-                                        value={formData[pregunta.id] as string}
-                                        onChange={(e) => handleChange(pregunta.id, e.target.value)}
-                                        minLength={pregunta.restricciones?.min}
-                                        maxLength={pregunta.restricciones?.max}
+                                        value={formData[p.id] as string}
+                                        onChange={(e) => handleChange(p.id, e.target.value)}
+                                        minLength={p.restricciones?.min}
+                                        maxLength={p.restricciones?.max}
                                         required
                                     />
-                                    {errores[pregunta.id] && (
-                                        <span className="text-danger">{errores[pregunta.id]}</span>
-                                    )}
+                                    {errores[p.id] && <div className="text-danger">{errores[p.id]}</div>}
                                 </div>
                             );
                         default:
                             return null;
                     }
                 })}
-                <button type="submit" className="btn btn-lg">Enviar</button>
+                {/* Botones: limpiar formulario actual + enviar */}
+                <div className="button-group">
+                    <button type="button" className="btn btn-secondary limpiar" onClick={limpiarLocalStorageDelFormulario}>
+                        Limpiar este formulario
+                    </button>
+                    <button type="submit" className="btn btn-lg enviar">Enviar</button>
+                </div>
             </form>
         </div>
     );
 };
 
-export default DynamicForm;//Exporta el componente DynamicForm
+export default DynamicForm; //Exporta el componente DynamicForm
