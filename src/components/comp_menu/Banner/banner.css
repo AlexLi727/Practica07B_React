@@ -41,6 +41,7 @@
 
 /* 🔹 Estilos para el selector de idioma */
 .banner select {
+  width: 100%;
   background-color: white;
   color: #4a4e91;
   border: 2px solid white;
