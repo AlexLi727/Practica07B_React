@@ -115,7 +115,7 @@ const DynamicForm: React.FC<DynamicFormProps> = () => {
         //En funcion de la ID de la pregunta, se aplican las validaciones correspondientes
         //En este caso, se valida que el campo nombre solo contenga letras y espacios
         if (id == 'nombre') {
-            const regex = /^[a-zA-Z\s]*$/;
+            const regex = /^[a-zA-ZÀ-ÿ\s]*$/; //incluimos caracteres como la ç, la ñ, las tildes y las diéresis
             if (!regex.test(value as string)) {
                 setErrores(prev => ({
                     ...prev,
